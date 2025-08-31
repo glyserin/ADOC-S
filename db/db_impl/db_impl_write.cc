@@ -1833,10 +1833,10 @@ Status DBImpl::DelayWrite(uint64_t num_bytes,
     if (delay > 0) {
       ROCKS_LOG_INFO(immutable_db_options_.info_log,
                      "[WRITE_STALL] Write delay triggered: %lu microseconds, bytes: %lu, "
-                     "delayed_writes: %u, stopped_writes: %u, rate_limit: %lu bytes/sec",
+                     "delayed: %s, stopped: %s, rate_limit: %lu bytes/sec",
                      delay, num_bytes, 
-                     write_controller_.TEST_total_delayed(),
-                     write_controller_.TEST_total_stopped(),
+                     write_controller_.NeedsDelay() ? "true" : "false",
+                     write_controller_.IsStopped() ? "true" : "false",
                      write_controller_.delayed_write_rate());
       
       if (write_options.no_slowdown) {
